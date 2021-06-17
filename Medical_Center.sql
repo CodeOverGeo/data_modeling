@@ -1,43 +1,48 @@
 ﻿--CREATED BY HAND:
-DROP DATABASE IF EXISTS medical_db
+DROP DATABASE IF EXISTS medical_db;
 
-CREATE DATABASE medical_db
+CREATE DATABASE medical_db;
 
-\c medical_db
+\c medical_db;
 
 CREATE TABLE doctors (
     doctor_id SERIAL PRIMARY KEY,
-    first_name TEXT NOT NULL INDEX,
-    last_name TEXT NOT NULL INDEX,
-    years INT,
-    phone_num TEXT
-)
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    specialty TEXT NOT NULL,
+    years INT
+);
 
 CREATE TABLE patients (
     patient_id SERIAL PRIMARY KEY,
-    first_name TEXT NOT NULL INDEX, 
-    last_name TEXT NOT NULL INDEX,
+    first_name TEXT NOT NULL, 
+    last_name TEXT NOT NULL,
     address TEXT,
     phone_num TEXT
-)
+);
 
 CREATE TABLE diseases (
     disease_id SERIAL PRIMARY KEY,
     disease TEXT NOT NULL
-)
+);
 
 CREATE TABLE visit (
     id SERIAL PRIMARY KEY,
     doctor_id INTEGER REFERENCES doctors ON DELETE CASCADE,
-    patient_id INTEGER REFERENCES patients ON DELETE CASCADE
+    patient_id INTEGER REFERENCES patients ON DELETE CASCADE,
     date DATE NOT NULL
-)
+);
 
 CREATE TABLE Vist_info (
     id SERIAL PRIMARY KEY,
     visit_id INTEGER REFERENCES visit ON DELETE CASCADE,
     diseases_id INTEGER REFERENCES diseases ON DELETE CASCADE
-)
+);
+
+CREATE INDEX doctor_first_name_idx ON doctors (first_name);
+CREATE INDEX doctor_last_name_idx ON doctors (last_name);
+CREATE INDEX patients_first_name_idx ON patients (first_name);
+CREATE INDEX patients_last_name_idx ON patients (last_name);
 
 
 -- -- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
