@@ -1,76 +1,61 @@
-CREATE TYPE "game_result" AS ENUM (
+DROP DATABASE IF EXISTS soccer;
+
+CREATE DATABASE soccer;
+
+\c soccer;
+
+CREATE TYPE game_result AS ENUM (
   'won',
   'lost',
   'draw'
 );
 
-CREATE TABLE "Teams" (
-  "team_id" SERIAL PRIMARY KEY,
-  "name" varchar UNIQUE,
-  "city" varchar UNIQUE
+CREATE TABLE Teams (
+  team_id SERIAL PRIMARY KEY,
+  name varchar UNIQUE NOT NULL,
+  city varchar UNIQUE NOT NULL
 );
 
-CREATE TABLE "Players" (
-  "player_id" SERIAL PRIMARY KEY,
-  "name" varchar UNIQUE,
-  "position" varchar,
-  "team_id" int
+CREATE TABLE Players (
+  player_id SERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  position varchar(10),
+  team_id int REFERENCES Teams
 );
 
-CREATE TABLE "Games" (
-  "game_id" SERIAL PRIMARY KEY,
-  "home_team" int,
-  "away_team" int,
-  "date" timestamp,
-  "lead_ref" int,
-  "side_ref" int,
-  "back_ref" int,
-  "season_id" int
+CREATE TABLE Referees (
+  ref_id SERIAL PRIMARY KEY,
+  name varchar UNIQUE NOT NULL,
+  years int 
 );
 
-CREATE TABLE "Referees" (
-  "ref_id" SERIAL PRIMARY KEY,
-  "name" varchar UNIQUE,
-  "years" int
+CREATE TABLE Season (
+  season_id SERIAL PRIMARY KEY,
+  start_date date NOT NULL,
+  end_date date NOT NULL
 );
 
-CREATE TABLE "Season" (
-  "season_id" SERIAL PRIMARY KEY,
-  "start_date" date,
-  "end_date" date
+CREATE TABLE Games (
+  game_id SERIAL PRIMARY KEY,
+  home_team int REFERENCES Teams,
+  away_team int REFERENCES Teams,
+  date timestamp,
+  lead_ref int REFERENCES Referees,
+  side_ref int REFERENCES Referees,
+  back_ref int REFERENCES Referees,
+  season_id int REFERENCES Season
 );
 
-CREATE TABLE "Goals" (
-  "id" SERIAL PRIMARY KEY,
-  "player_id" int,
-  "game_id" int
+CREATE TABLE Goals (
+  id SERIAL PRIMARY KEY,
+  player_id int REFERENCES Players,
+  game_id int REFERENCES Games
 );
 
-CREATE TABLE "Results" (
-  "id" SERIAL PRIMARY KEY,
-  "team_id" int,
-  "game_id" int,
-  "result" game_result
+CREATE TABLE Results (
+  id SERIAL PRIMARY KEY,
+  team_id int REFERENCES Teams,
+  game_id int REFERENCES Games,
+  result game_result NOT NULL
 );
 
-ALTER TABLE "Teams" ADD FOREIGN KEY ("team_id") REFERENCES "Players" ("team_id");
-
-ALTER TABLE "Teams" ADD FOREIGN KEY ("team_id") REFERENCES "Games" ("home_team");
-
-ALTER TABLE "Teams" ADD FOREIGN KEY ("team_id") REFERENCES "Games" ("away_team");
-
-ALTER TABLE "Referees" ADD FOREIGN KEY ("ref_id") REFERENCES "Games" ("lead_ref");
-
-ALTER TABLE "Referees" ADD FOREIGN KEY ("ref_id") REFERENCES "Games" ("side_ref");
-
-ALTER TABLE "Referees" ADD FOREIGN KEY ("ref_id") REFERENCES "Games" ("back_ref");
-
-ALTER TABLE "Season" ADD FOREIGN KEY ("season_id") REFERENCES "Games" ("season_id");
-
-ALTER TABLE "Players" ADD FOREIGN KEY ("player_id") REFERENCES "Goals" ("player_id");
-
-ALTER TABLE "Games" ADD FOREIGN KEY ("game_id") REFERENCES "Goals" ("game_id");
-
-ALTER TABLE "Teams" ADD FOREIGN KEY ("team_id") REFERENCES "Results" ("team_id");
-
-ALTER TABLE "Games" ADD FOREIGN KEY ("game_id") REFERENCES "Results" ("game_id");
