@@ -19,6 +19,9 @@ CREATE TABLE Teams (
 CREATE TABLE Players (
   player_id SERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
+  birthdate date,
+  height int,
+  weight int,
   position varchar(10),
   team_id int REFERENCES Teams
 );
@@ -39,7 +42,10 @@ CREATE TABLE Games (
   game_id SERIAL PRIMARY KEY,
   home_team int REFERENCES Teams,
   away_team int REFERENCES Teams,
-  date timestamp,
+  location string,
+  date date,
+  start_time timestamp,
+  end_time timestamp
   lead_ref int REFERENCES Referees,
   side_ref int REFERENCES Referees,
   back_ref int REFERENCES Referees,

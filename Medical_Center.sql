@@ -17,13 +17,15 @@ CREATE TABLE patients (
     patient_id SERIAL PRIMARY KEY,
     first_name TEXT NOT NULL, 
     last_name TEXT NOT NULL,
+    birthday string NOT NULL,
     address TEXT,
     phone_num TEXT
 );
 
 CREATE TABLE diseases (
     disease_id SERIAL PRIMARY KEY,
-    disease TEXT NOT NULL
+    disease TEXT NOT NULL,
+    description TEXT NOT NULL
 );
 
 CREATE TABLE visit (
@@ -36,7 +38,8 @@ CREATE TABLE visit (
 CREATE TABLE Vist_info (
     id SERIAL PRIMARY KEY,
     visit_id INTEGER REFERENCES visit ON DELETE CASCADE,
-    diseases_id INTEGER REFERENCES diseases ON DELETE CASCADE
+    diseases_id INTEGER REFERENCES diseases ON DELETE CASCADE,
+    notes TEXT
 );
 
 CREATE INDEX doctor_first_name_idx ON doctors (first_name);
