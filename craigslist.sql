@@ -6,7 +6,7 @@ CREATE DATABASE craigslist;
 
 CREATE TABLE Regions (
   id SERIAL PRIMARY KEY,
-  city varchar(20)
+  name varchar(20)
 );
 
 CREATE TABLE Users(
@@ -19,7 +19,7 @@ CREATE TABLE Users(
 
 CREATE TABLE Catergories (
   id SERIAL PRIMARY KEY,
-  category varchar(20)
+  name varchar(20)
 );
 
 CREATE TABLE Posts (
